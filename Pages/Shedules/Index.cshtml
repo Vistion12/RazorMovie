@@ -1,0 +1,60 @@
+﻿@page
+@model RazorMovie.Pages.Shedules.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Shedule[0].StartFilm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Shedule[0].EndFilm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Shedule[0].Cost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Shedule[0].Movie.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Shedule[0].HallCinema)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Shedule)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartFilm)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndFilm)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Movie.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HallCinema.NumberHall)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

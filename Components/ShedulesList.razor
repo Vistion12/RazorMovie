@@ -1,0 +1,26 @@
+﻿@using RazorMovie.Data
+@using RazorMovie.Model
+@using Microsoft.EntityFrameworkCore;
+@using Microsoft.AspNetCore.Components.Web
+@inject Ticket ticket
+
+
+<div class="row row-cols-4">
+    @if (ticket.SelectedShedule is not null)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            <button @onclick="(e => SelectShedule(i))"
+                   >
+                More Info
+            </button>
+        }
+    }
+</div>
+
+@code {
+    public void SelectShedule(int i)
+    {
+        
+    }
+}
