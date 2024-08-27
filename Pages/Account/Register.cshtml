@@ -1,0 +1,41 @@
+﻿@page
+@model RazorMovie.Pages.Account.RegisterModel
+
+
+@{
+	ViewData["Title"] = "Регистрация";
+}
+
+
+<div class="row">
+	<div class="col-md-6 offset-3">
+		<p>
+			<h4>Регистрация</h4>
+		</p>
+		@if (TempData["Error"] != null)
+		{
+			<div>
+				<span><b>Извините </b> @TempData["Error"]</span>
+			</div>
+		}
+		<div class="row">
+			<div class="col-md-8 offset-2">
+				<form method="post">
+					<div class="form-date">
+						<label asp-for="@Model.RegisterViewModel.EmailAddress"></label>
+						<input asp-for="@Model.RegisterViewModel.EmailAddress"></input>
+					</div>
+					<div class="form-date">
+						<label asp-for="@Model.RegisterViewModel.Password"></label>
+						<input asp-for="@Model.RegisterViewModel.Password"></input>
+					</div>
+					<div class="form-date">
+						<label asp-for="@Model.RegisterViewModel.ConfirmPassword"></label>
+						<input asp-for="@Model.RegisterViewModel.ConfirmPassword"></input>
+					</div>
+					<input type="submit" value="Зарегиться"></input>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,7 @@
+﻿@using RazorMovie.Data
+<h3>Component</h3>
+@inject MovieContext movieContext;
+@foreach(var movie in movieContext.Movies)
+{
+	<h1>@movie.Title</h1>
+}

@@ -1,42 +1,48 @@
 ﻿@page
+@using RazorMovie.Components
 @model RazorMovie.Pages.HallsCinema.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+	<a asp-page="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.HallCinema[0].CountRows)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HallCinema[0].CountSeats)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.HallCinema) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CountRows)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CountSeats)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.NumberHall">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.NumberHall">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.NumberHall">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.HallCinema[0].CountRows)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.HallCinema[0].CountSeats)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.HallCinema)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.CountRows)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CountSeats)
+				</td>
+				<td>
+					<a asp-page="./Edit" asp-route-id="@item.NumberHall">Edit</a> |
+					<a asp-page="./Details" asp-route-id="@item.NumberHall">Details</a> |
+					<a asp-page="./Delete" asp-route-id="@item.NumberHall">Delete</a>
+				</td>
+			</tr>
+		}
+		@* @(await Html.RenderComponentAsync<Component>(RenderMode.ServerPrerendered)) *@
+
+	</tbody>
 </table>
+
+				@* <script src="_framework/blazor.service.js"></script> *@

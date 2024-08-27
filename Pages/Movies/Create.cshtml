@@ -11,27 +11,27 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Movie.Title" class="control-label"></label>
-                <input asp-for="Movie.Title" class="form-control" />
-                <span asp-validation-for="Movie.Title" class="text-danger"></span>
+                <label asp-for="movieViewModel.Title" class="control-label"></label>
+                <input asp-for="movieViewModel.Title" class="form-control" />
+                <span asp-validation-for="movieViewModel.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Movie.URL" class="control-label"></label>
-                <input asp-for="Movie.URL" class="form-control" />
-                <span asp-validation-for="Movie.URL" class="text-danger"></span>
+                <label asp-for="movieViewModel.URL" class="control-label"></label>
+                <input asp-for="movieViewModel.URL" type="file" class="form-control" />
+                <span asp-validation-for="movieViewModel.URL" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Movie.Description" class="control-label"></label>
-                <input asp-for="Movie.Description" class="form-control" />
-                <span asp-validation-for="Movie.Description" class="text-danger"></span>
+                <label asp-for="movieViewModel.Description" class="control-label"></label>
+                <input asp-for="movieViewModel.Description" class="form-control" />
+                <span asp-validation-for="movieViewModel.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Movie.Duration" class="control-label"></label>
-                <input asp-for="Movie.Duration" class="form-control" />
-                <span asp-validation-for="Movie.Duration" class="text-danger"></span>
+                <label asp-for="movieViewModel.Duration" class="control-label"></label>
+                <input asp-for="movieViewModel.Duration" class="form-control" />
+                <span asp-validation-for="movieViewModel.Duration" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

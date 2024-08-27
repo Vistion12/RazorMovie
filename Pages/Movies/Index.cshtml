@@ -35,7 +35,9 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.URL)
+                    <p>@item.URL</p>
+                <img style="width: 150px; height:200px;" src="@item.URL" alt="@item.Title" />
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)

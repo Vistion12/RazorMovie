@@ -7,57 +7,54 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RazorMovie.Data;
 using RazorMovie.Model;
+using RazorMovie.Services;
+using RazorMovie.Services.Interfaces;
 
-namespace RazorMovie.Pages.Movies
+namespace RazorMovie.Pages.Movies;
+
+public class DeleteModel(MovieContext context, IPhotoService photoService) : PageModel
 {
-    public class DeleteModel : PageModel
+    
+
+    [BindProperty]
+    public Movie Movie { get; set; } = default!;
+
+    public async Task<IActionResult> OnGetAsync(int? id)
     {
-        private readonly RazorMovie.Data.MovieContext _context;
-
-        public DeleteModel(RazorMovie.Data.MovieContext context)
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        [BindProperty]
-        public Movie Movie { get; set; } = default!;
+        var movie = await context.Movies.FirstOrDefaultAsync(m => m.Id == id);
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (movie == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        else
+        {
+            Movie = movie;
+        }
+        return Page();
+    }
 
-            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Movie = movie;
-            }
-            return Page();
+    public async Task<IActionResult> OnPostAsync(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        var movie = await context.Movies.FindAsync(id);
+        if (movie != null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
-            {
-                Movie = movie;
-                _context.Movies.Remove(Movie);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
+            Movie = movie;           
+            context.Movies.Remove(Movie);
+            await context.SaveChangesAsync();
+            await photoService.DeletePhotoAsync(movie.URL);
         }
+
+        return RedirectToPage("./Index");
     }
 }

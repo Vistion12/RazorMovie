@@ -1,0 +1,36 @@
+﻿@page
+@model RazorMovie.Pages.Account.LoginModel
+
+@{
+	ViewData["Title"] = "Вход";
+}
+
+
+<div class="row">
+	<div class="col-md-6 offset-3">
+		<p>
+			<h4>Вход в аккаунт</h4>
+		</p>
+		@if (TempData["Error"] != null)
+		{
+			<div>
+				<span><b>Извините </b> @TempData["Error"]</span>
+			</div>
+		}
+		<div class="row">
+			<div class="col-md-8 offset-2">
+				<form method="post">
+					<div class="form-date">
+						<label asp-for="@Model.LoginViewModel.EmailAddress"></label>
+						<input asp-for="@Model.LoginViewModel.EmailAddress"></input>
+					</div>
+					<div class="form-date">
+						<label asp-for="@Model.LoginViewModel.Password"></label>
+						<input asp-for="@Model.LoginViewModel.Password"></input>
+					</div>
+					<input type="submit" value="Войти"></input>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

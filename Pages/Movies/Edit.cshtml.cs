@@ -8,70 +8,74 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RazorMovie.Data;
 using RazorMovie.Model;
+using RazorMovie.Services;
+using RazorMovie.Services.Interfaces;
+using RazorMovie.ViewModel;
 
-namespace RazorMovie.Pages.Movies
+namespace RazorMovie.Pages.Movies;
+
+public class EditModel(MovieContext context, IPhotoService photoService) : PageModel
 {
-    public class EditModel : PageModel
-    {
-        private readonly RazorMovie.Data.MovieContext _context;
 
-        public EditModel(RazorMovie.Data.MovieContext context)
+
+    [BindProperty]
+    public MovieViewModel movieViewModel { get; set; } = default!;
+
+    public Movie? Movie {  get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        [BindProperty]
-        public Movie Movie { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? id)
+        var movie = await context.Movies.FirstOrDefaultAsync(m => m.Id == id);
+        if (movie == null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            return NotFound();
+        }
+        Movie = movie;
 
-            var movie =  await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
-            Movie = movie;
+        movieViewModel = new MovieViewModel
+        {
+            Id = movie.Id,
+            Title = movie.Title,
+            Description = movie.Description,
+            Duration = movie.Duration,
+            URL = null,
+        };
+
+        return Page();
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see https://aka.ms/RazorPagesCRUD.
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
+        {
             return Page();
         }
+        var movie = await context.Movies.FirstOrDefaultAsync(m => m.Id == movieViewModel.Id);
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        
+
+        if (movieViewModel.URL is not null)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            await photoService.DeletePhotoAsync(movie.URL);
+            var ResultAddPhoto = await photoService.AddPhotoAsync(movieViewModel.URL);
+            movie.URL = ResultAddPhoto.Url.ToString();
+        }    
 
-            _context.Attach(Movie).State = EntityState.Modified;
+        movie.Title = movieViewModel.Title;
+        movie.Description = movieViewModel.Description;
+        movie.Duration = movieViewModel.Duration;
+        
+        await context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(Movie.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movies.Any(e => e.Id == id);
-        }
+        return RedirectToPage("./Index");
     }
+
+
 }

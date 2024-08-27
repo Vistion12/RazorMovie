@@ -1,4 +1,5 @@
 ﻿@page
+@using RazorMovie.Components
 @model RazorMovie.Pages.Shedules.IndexModel
 
 @{
@@ -49,12 +50,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.HallCinema.NumberHall)
                 </td>
-                <td>
+                <td>                    
                     <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
+        @* @(await Html.RenderComponentAsync<Component>(RenderMode.ServerPrerendered)) *@
     </tbody>
 </table>
+
+@* <script src="_framework/blazor.service.js"></script> *@

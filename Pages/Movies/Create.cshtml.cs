@@ -7,38 +7,42 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorMovie.Data;
 using RazorMovie.Model;
+using RazorMovie.Services.Interfaces;
+using RazorMovie.ViewModel;
 
-namespace RazorMovie.Pages.Movies
-{
-    public class CreateModel : PageModel
+namespace RazorMovie.Pages.Movies;
+
+public class CreateModel(MovieContext context, IPhotoService photoService) : PageModel
+{   
+    public IActionResult OnGet()
     {
-        private readonly RazorMovie.Data.MovieContext _context;
+        return Page();
+    }
 
-        public CreateModel(RazorMovie.Data.MovieContext context)
-        {
-            _context = context;
-        }
+    [BindProperty]
+    public MovieViewModel movieViewModel { get; set; } = default!;
 
-        public IActionResult OnGet()
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid || movieViewModel.URL is null)
         {
             return Page();
         }
 
-        [BindProperty]
-        public Movie Movie { get; set; } = default!;
+        var resultAddPhotoASync = await photoService.AddPhotoAsync(movieViewModel.URL);
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        var movie = new Movie
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            Title = movieViewModel.Title,
+            Description = movieViewModel.Description,
+            Duration = default(TimeSpan),
+            URL= resultAddPhotoASync.Url.ToString(),
+        };
 
-            _context.Movies.Add(Movie);
-            await _context.SaveChangesAsync();
+        context.Movies.Add(movie);
+        await context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
-        }
+        return RedirectToPage("./Index");
     }
 }

@@ -16,6 +16,7 @@ public class Movie
 
     [Required(ErrorMessage = "Поле 'URL фотографии' не заполнено")]
     public required string URL { get; set; }
+   
 
     [Required(ErrorMessage = "Поле 'Описание фильма' не заполнено")]
     [StringLength(

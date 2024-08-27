@@ -1,12 +1,19 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RazorMovie.Core;
 using RazorMovie.Data;
 using RazorMovie.Model;
+using RazorMovie.Services;
+using RazorMovie.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigureServices(builder.Services);
 
 var app = builder.Build();
+
+await Seed.SeedUserAndRolesAsync(app);
 
 Configure(app, app.Environment);
 
@@ -17,7 +24,17 @@ void ConfigureServices(IServiceCollection services)
     services.AddSingleton<Order>();
     services.AddSingleton<Ticket>();
     services.AddSingleton<HallCinema>();
-    services.AddSingleton<FormatedShedule>();    
+    services.AddSingleton<FormatedShedule>();
+
+	services.AddScoped<IPhotoService, PhotoService>();
+   services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
+	services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<MovieContext>();
+	services.AddMemoryCache();
+	services.AddSession();
+	services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
+
     services.AddDbContext<MovieContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("MovieContext") ??
 		throw new InvalidOperationException("Connection string 'MovieContext' not found.")));
@@ -39,8 +56,9 @@ void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 	app.UseRouting();
 	app.UseEndpoints(x =>
 	{
-        x.MapRazorPages();
-        x.MapBlazorHub();
+		x.MapBlazorHub();
+		x.MapRazorPages();
+       
     });
 
 }
